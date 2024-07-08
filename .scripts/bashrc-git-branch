@@ -1,0 +1,19 @@
+#!/bin/bash
+
+WHITE=\e[37m
+CYAN=\e[36m
+GREEN=\e[42m
+RED=\e[41m
+
+BRANCH=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
+if [[ $BRANCH ]]; then
+	CHANGES=$(git diff --shortstat)
+	if [[ $CHANGES ]]; then
+		CHANGES=$(echo $CHANGES | sed "s/[[:blank:][:alpha:]]//g")
+		FILES=$(echo $CHANGES | sed -r "s/(.*),(.*)\(\+\),(.*)\(-\)/\1/")
+		ADD=$(echo $CHANGES | sed -r "s/(.*),(.*)\(\+\),(.*)\(-\)/\2/")
+		SUB=$(echo $CHANGES | sed -r "s/(.*),(.*)\(\+\),(.*)\(-\)/\3/")
+	fi
+
+	echo -e ":\e[36m$BRANCH \e[37m$FILES-\e[32m$ADD\e[37m/\e[31m$SUB\e[37m"
+fi

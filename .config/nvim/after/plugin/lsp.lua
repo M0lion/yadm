@@ -84,7 +84,11 @@ local function rename_file()
 	}, function(input) vim.lsp.util.rename(current, input) end)
 end
 
-local function on_attach(_, bufnr)
+local function on_attach(client, bufnr)
+	if client.name == "gleam" then
+		client.server_capabilities.documentFormattinProvider = true
+	end
+
   local opts = {buffer = bufnr, remap = false}
 
   vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
@@ -118,3 +122,10 @@ nvim_lsp.tsserver.setup {
   root_dir = nvim_lsp.util.root_pattern("package.json"),
   single_file_support = false
 }
+
+nvim_lsp.gleam.setup({
+	cmd = { "gleam", "lsp" },
+	filetypes = { "gleam" },
+	root_dir = nvim_lsp.util.root_pattern("gleam.toml", ".git"),
+	on_attach = on_attach,
+})

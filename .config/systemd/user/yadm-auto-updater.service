@@ -1,0 +1,7 @@
+[Unit]
+Description=Auto pull yadm
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/yadm pull
+WorkingDirectory=%h

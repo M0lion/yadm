@@ -1,0 +1,9 @@
+[Unit]
+Description=Update yadm dotfiles periodically
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=1h
+
+[Install]
+WantedBy=timers.target

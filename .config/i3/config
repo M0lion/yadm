@@ -593,3 +593,8 @@ bindsym $mod+t exec --no-startup-id rofi -show window \
 #exec --no-startup-id greenclip daemon>/dev/null
 #bindsym $mod+c exec --no-startup-id rofi -modi "clipboard:greenclip print" -show clipboard \
 #		-config ~/.config/rofi/rofidmenu.rasi
+
+# Popup term window class
+for_window [class="float-term"] floating enable, resize set 70 ppt 70 ppt, move position center
+# Example:
+#alacritty --class float-term -e whiptail --yesno "Proceed?" 10 30

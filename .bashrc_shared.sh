@@ -10,4 +10,9 @@ if ! fc-list | grep -i "Hack Nerd Font Mono" > /dev/null; then
     getnf -i "Hack Mono"
 fi
 
+# Fzf nvim opener
+nf() {
+    nvim $(fzf)
+}
+
 alias tnux=tmux-projects.sh

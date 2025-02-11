@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+SERVICES_LIST="$HOME/.config/yadm/services"
+
+if [[ -f "$SERVICES_LIST" ]]; then
+	while IFS= read -r service; do
+		# Skip empty lines and comments
+		[[ -z "$service" ]] && continue
+		[[ "$service" == \#* ]] && continue
+
+		# Check if service file exists
+		if [[ -f "$HOME/.config/systemd/user/$service" ]]; then
+			echo "Enabling $service"
+			systemctl --user enable "$service" || true
+		else
+			echo "Missing service file for $service"
+		fi
+	done < "$SERVICES_LIST"
+
+	systemctl --user daemon-reload
+fi

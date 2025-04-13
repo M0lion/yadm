@@ -1,12 +1,9 @@
-vim.g.mapleader = " " 
-
 -- Open file explorer
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
-vim.keymap.set("n", "<leader>pt", ":Neotree current toggle<CR>")
 
+-- Move lines with J and K
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
-
 -- J moves line to end of previous line, this bind keeps cursor in the same place instead of moving it
 vim.keymap.set("n", "J", "mzJ`z")
 
@@ -28,28 +25,8 @@ vim.keymap.set({"n", "v"}, "<leader>P", [["+P]])
 -- Delete without yanking
 vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
 
--- tmux stuff
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
-
--- search replace word
-vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
-
 -- make current file executable
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
--- Escape form terminal
-vim.keymap.set("t", "<C-Space>", [[<C-\><C-n>]])
-vim.keymap.set("t", "<C-d>", [[<C-\><C-n>]])
-
 -- Ctrl + s saves
 vim.keymap.set({"n", "i", "v"}, "<C-s>", "<Esc>:wr<CR>")
-
--- Matching brackets
-vim.keymap.set({"i"}, "<C-q><C-w>", "()<Esc>i")
-vim.keymap.set({"i"}, "<C-q><C-e>", "{}<Esc>i")
-vim.keymap.set({"i"}, "<C-q><C-r>", "[]<Esc>i")
-vim.keymap.set({"i"}, "<C-q><C-Space>", "<Cr><Esc>O")
-
--- closing tags
-vim.keymap.set({"i"}, "<C-w><C-e>", "/>")
-vim.keymap.set({"i"}, "<C-w><C-r>", "><Esc>hvT<lt>yf>a<lt>/><Esc>PF<i")

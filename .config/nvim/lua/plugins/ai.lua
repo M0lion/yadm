@@ -101,10 +101,19 @@ return {
 		},
 		opts = {
 			--Refer to: https://github.com/olimorris/codecompanion.nvim/blob/main/lua/codecompanion/config.lua
+			adapters = {
+				anthropic = function()
+					return require("codecompanion.adapters").extend("anthropic", {
+						env = {
+							api_key = "cmd:op read op://Employee/Anthropic/credential --no-newline",
+						},
+					})
+				end,
+			},
 			strategies = {
 				--NOTE: Change the adapter as required
 				chat = {
-					adapter = "claude",
+					adapter = "anthropic",
 					tools = {
 						["mcp"] = {
 							callback = function()

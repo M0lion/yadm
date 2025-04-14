@@ -25,6 +25,21 @@ lsp.configure('sumneko_lua', {
     }
 })
 
+lsp.configure('rust_analyzer', {
+  settings = {
+    ["rust-analyzer"] = {
+			cargo = {
+				buildScripts = {
+					enable = true,
+				},
+			},
+      procMacro = {
+        enable = true,
+      },
+    }
+  }
+})
+
 lsp.configure('tsserver', {
 	init_options = {
 		preferences = {

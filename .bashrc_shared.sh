@@ -7,7 +7,7 @@ fi
 # Check if Hack font is installed using fc-list
 if ! fc-list | grep -i "Hack Nerd Font Mono" > /dev/null; then
     echo "Hack font not found. Installing..."
-    getnf -i "Hack Mono"
+    getnf -iHack
 fi
 
 # Fzf nvim opener

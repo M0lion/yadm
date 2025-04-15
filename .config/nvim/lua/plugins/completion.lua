@@ -1,40 +1,29 @@
 return {
-  {
-    "blink-cmp/blink.cmp",
-    event = "InsertEnter",
-    dependencies = {
-      "hrsh7th/nvim-cmp",
-      "L3MON4D3/LuaSnip",
-    },
-    config = function()
-      local cmp = require("cmp")
-      local luasnip = require("luasnip")
-      
-      cmp.setup({
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
-        },
-        mapping = cmp.mapping.preset.insert({
-          ["<C-n>"] = cmp.mapping.select_next_item(),
-          ["<C-p>"] = cmp.mapping.select_prev_item(),
-          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-          ["<C-f>"] = cmp.mapping.scroll_docs(4),
-          ["<C-d>"] = cmp.mapping.complete(),
-          ["<C-e>"] = cmp.mapping.abort(),
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-        }),
-        sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "luasnip" },
-          { name = "buffer" },
-          { name = "path" },
-        }),
-        experimental = {
-          ghost_text = true,
-        },
-      })
-    end,
-  },
+	{
+		'saghen/blink.cmp',
+		-- optional: provides snippets for the snippet source
+		dependencies = { 'rafamadriz/friendly-snippets' },
+		version = "1.*",
+		opts = {
+			-- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
+			-- 'super-tab' for mappings similar to vscode (tab to accept)
+			-- 'enter' for enter to accept
+			-- 'none' for no mappings
+			--
+			-- All presets have the following mappings:
+			-- C-space: Open menu or open docs if already open
+			-- C-n/C-p or Up/Down: Select next/previous item
+			-- C-e: Hide menu
+			-- C-k: Toggle signature help (if signature.enabled = true)
+			--
+			-- See :h blink-cmp-config-keymap for defining your own keymap
+			keymap = { preset = "default" },
+
+			appearance = {
+				-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+				-- Adjusts spacing to ensure icons are aligned
+				nerd_font_variant = "mono"
+			},
+		},
+	}
 }

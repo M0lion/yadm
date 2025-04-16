@@ -1,0 +1,43 @@
+set -o xtrace
+
+# Get paths
+
+PATHS="$HOME"
+CONFIG_FILE="$HOME/.config/tmux-sessions/paths.list"
+if test -f $CONFIG_FILE; then
+  PATHS=$(cat $CONFIG_FILE | tr "\n" " " | envsubst)
+fi
+
+TARGET=$({ tmux list-sessions -F#{session_path} ; find $PATHS -maxdepth 1 -type d ; } | sed 's:/*$::' | sort -u | fzf)
+
+for SESSION in $(tmux list-sessions -F#{session_name} -f"#{==:#{session_path},$TARGET}")
+do
+	if test -z $TMUX; then
+		tmux attach-session -t $SESSION
+	else
+		tmux switch-client -t $SESSION
+	fi
+	exit
+done
+
+NAME=$(basename $TARGET)
+REST=$(dirname $TARGET)
+
+while [ ! -z $(tmux list-sessions -f"#{==:#{session_name},$NAME}" -F"#{session_name}") ];
+do
+	echo "has $NAME"
+	NAME=$(basename $REST)/$NAME
+	REST=$(dirname $REST)
+done
+
+echo $NAME
+tmux new -d -c $TARGET -s $NAME
+
+if test -z $TMUX; then
+	tmux attach-session -t $NAME
+else
+	tmux switch-client -t $NAME
+fi
+
+# Get current session paths
+# tmux list-sessions -F#{session_path}

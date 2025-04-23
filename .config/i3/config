@@ -172,7 +172,7 @@ bindcode $mod+Shift+90 	 move container to workspace  $ws10
 ######################################
 
 # start a terminal
-bindsym $mod+Return exec --no-startup-id alacritty
+bindsym $mod+Return exec --no-startup-id kitty
 
 # kill focused window
 bindsym $mod+q kill
@@ -597,4 +597,4 @@ bindsym $mod+t exec --no-startup-id rofi -show window \
 # Popup term window class
 for_window [class="float-term"] floating enable, resize set 70 ppt 70 ppt, move position center
 # Example:
-#alacritty --class float-term -e whiptail --yesno "Proceed?" 10 30
+#kitty --class float-term -e whiptail --yesno "Proceed?" 10 30

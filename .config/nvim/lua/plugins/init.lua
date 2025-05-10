@@ -5,6 +5,7 @@ return {
 	{ import = "plugins.lsp" },
 	{ import = "plugins.completion" },
 	{ import = "plugins.formatting" },
-	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
-	{ "tpope/vim-fugitive", config = function() vim.keymap.set("n", "<leader>gs", vim.cmd.Git) end }
+	{ import = "plugins.snacks" },
+	{ "catppuccin/nvim",            name = "catppuccin",                                                   priority = 1000 },
+	{ "tpope/vim-fugitive",         config = function() vim.keymap.set("n", "<leader>gs", vim.cmd.Git) end }
 }

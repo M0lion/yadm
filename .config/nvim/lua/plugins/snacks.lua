@@ -14,5 +14,10 @@ return {
 			git = { enabled = true },
 			lazygit = { enabled = true },
 		},
+		config = function()
+			vim.keymap.set("n", "<leader>gs", function()
+				Snacks.lazygit()
+			end)
+		end
 	}
 }

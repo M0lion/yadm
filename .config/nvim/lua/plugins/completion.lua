@@ -2,7 +2,7 @@ return {
 	{
 		'saghen/blink.cmp',
 		-- optional: provides snippets for the snippet source
-		dependencies = { 'rafamadriz/friendly-snippets' },
+		dependencies = { 'rafamadriz/friendly-snippets', 'L3MON4D3/LuaSnip', version = 'v2.*' },
 		version = "1.*",
 		opts = {
 			-- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
@@ -17,15 +17,28 @@ return {
 			-- C-k: Toggle signature help (if signature.enabled = true)
 			--
 			-- See :h blink-cmp-config-keymap for defining your own keymap
-			keymap = { preset = "enter" },
+			keymap = { preset = "default" },
 
 			signature = { enabled = true },
+
+			snippets = { preset = 'luasnip' },
 
 			appearance = {
 				-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
 				-- Adjusts spacing to ensure icons are aligned
 				nerd_font_variant = "mono"
 			},
+		},
+	},
+	{
+		"L3MON4D3/LuaSnip",
+		-- follow latest release.
+		version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+		-- install jsregexp (optional!).
+		build = "make install_jsregexp",
+		opts = {
+			history = true,
+			updateevents = "TextChanged,TextChangedI",
 		},
 	}
 }

@@ -14,8 +14,7 @@ return {
 			-- Setup Mason
 			require("mason").setup()
 
-			local mason = require("mason-lspconfig")
-			mason.setup({
+			require("mason-lspconfig").setup({
 				ensure_installed = {
 					"lua_ls",
 					"ts_ls",

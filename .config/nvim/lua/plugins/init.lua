@@ -6,5 +6,7 @@ return {
 	{ import = "plugins.completion" },
 	{ import = "plugins.formatting" },
 	{ import = "plugins.snacks" },
+	{ import = "plugins.mini" },
+	{ "nvim-treesitter/nvim-treesitter" },
 	{ "catppuccin/nvim",            name = "catppuccin", priority = 1000 },
 }

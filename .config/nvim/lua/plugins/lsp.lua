@@ -1,47 +1,72 @@
 return {
 	{
-		"neovim/nvim-lspconfig",
+		"folke/lazydev.nvim",
+		ft = "lua", -- only load on lua files
+		opts = {
+			library = {
+				-- See the configuration section for more details
+				-- Load luvit types when the `vim.uv` word is found
+				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+			},
+		},
+	},
+	{
+		"mason-org/mason.nvim",
+		opts = {},
+	},
+	{
+		"mason-org/mason-lspconfig.nvim",
 		dependencies = {
 			-- LSP Management
-			"williamboman/mason.nvim",
-			"williamboman/mason-lspconfig.nvim",
+			"mason-org/mason.nvim",
+			"neovim/nvim-lspconfig",
 
 			-- Completion
 			"saghen/blink.cmp"
 		},
 		event = { "BufReadPre", "BufNewFile" },
-		config = function()
-			-- Setup Mason
-			require("mason").setup()
+		opts = {
+			ensure_installed = {
+				"lua_ls",
+				"ts_ls",
+				"rust_analyzer",
 
+			},
+			automatic_installation = true,
+		},
+		config = function()
 			require("mason-lspconfig").setup({
 				ensure_installed = {
 					"lua_ls",
 					"ts_ls",
-					"rust_analyzer",
 				},
 				automatic_installation = true,
+				automatic_enable = true,
 			})
 
-			-- LSP keybindings
-			vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-			vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-			vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, opts)
-			vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action, opts)
-			vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, opts)
-			vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
+			local on_attach = function(_, bufnr)
+				local opts = { noremap = true, silent = true, buffer = bufnr }
+				-- LSP keybindings
+				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+				vim.keymap.set("n", "<leader>vrn", vim.lsp.buf.rename, opts)
+				vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action, opts)
+				vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, opts)
+				vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
 
-			-- LSP-related Telescope keybindings
-			local builtin = require('telescope.builtin')
-			vim.keymap.set('n', '<leader>ps', builtin.lsp_document_symbols, opts)
-			vim.keymap.set('n', '<leader>per', builtin.diagnostics, opts)
-			vim.keymap.set('n', '<leader>prr', builtin.lsp_references, opts)
+				-- LSP-related Telescope keybindings
+				local builtin = require('telescope.builtin')
+				vim.keymap.set('n', '<leader>ps', builtin.lsp_document_symbols, opts)
+				vim.keymap.set('n', '<leader>per', builtin.diagnostics, opts)
+				vim.keymap.set('n', '<leader>prr', builtin.lsp_references, opts)
+			end
 
 			-- Set up global LSP behavior
 			local capabilities = require('blink.cmp').get_lsp_capabilities()
 
 			vim.lsp.config("*", {
 				capabilities = capabilities,
+				on_attach = on_attach,
 			})
 		end,
 	}

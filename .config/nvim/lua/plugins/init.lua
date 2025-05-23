@@ -8,5 +8,12 @@ return {
 	{ import = "plugins.snacks" },
 	{ import = "plugins.mini" },
 	{ "nvim-treesitter/nvim-treesitter" },
-	{ "catppuccin/nvim",            name = "catppuccin", priority = 1000 },
+	{ "catppuccin/nvim",
+	name = "catppuccin",
+	priority = 1000, 
+	config = function()
+		-- Color scheme
+		vim.cmd.colorscheme "catppuccin" -- Set the colorscheme to Catppuccin
+	end,
+},
 }

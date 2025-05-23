@@ -37,5 +37,3 @@ vim.opt.isfname:append("@-@")   -- Add @ to the list of characters considered pa
 
 vim.opt.updatetime = 50         -- Reduce update time for more responsive UI (default is 4000ms)
 
--- Color scheme
-vim.cmd.colorscheme "catppuccin" -- Set the colorscheme to Catppuccin

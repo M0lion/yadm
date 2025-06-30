@@ -1,4 +1,4 @@
-# exec --no-startup-id ~/set_once.sh
+
 # This file is a modified version based on default i3-config-wizard config
 # source is available here:
 # https://raw.githubusercontent.com/endeavouros-team/endeavouros-i3wm-setup/main/etc/skel/.config/i3/config
@@ -172,7 +172,7 @@ bindcode $mod+Shift+90 	 move container to workspace  $ws10
 ######################################
 
 # start a terminal
-bindsym $mod+Return exec --no-startup-id kitty
+bindsym $mod+Return exec --no-startup-id alacritty
 
 # kill focused window
 bindsym $mod+q kill
@@ -597,4 +597,7 @@ bindsym $mod+t exec --no-startup-id rofi -show window \
 # Popup term window class
 for_window [class="float-term"] floating enable, resize set 70 ppt 70 ppt, move position center
 # Example:
-#kitty --class float-term -e whiptail --yesno "Proceed?" 10 30
+#alacritty --class float-term -e whiptail --yesno "Proceed?" 10 30
+
+# Screenshot bind
+bindsym $mod+Shift+s exec ~/.config/i3/screenshot.sh

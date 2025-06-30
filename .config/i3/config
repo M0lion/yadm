@@ -574,8 +574,7 @@ strip_workspace_numbers yes
 # Moving workspaces between screens 
 bindsym $mod+Shift+W move workspace to output right
 
-bindsym $mod+d exec --no-startup-id rofi -modi drun -show drun \
-		-config ~/.config/rofi/rofidmenu.rasi
+bindsym $mod+d exec --no-startup-id rofi -modi drun -show drun
 
 #bindsym F9 exec --no-startup-id rofi -modi drun -show drun \
 #		-config ~/.config/rofi/rofidmenu.rasi

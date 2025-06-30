@@ -1,1 +1,4 @@
- @theme "~/.local/share/rofi/themes/arc_dark_transparent_colors.rasi"
+@import "catppuccin-default"
+configuration {
+	show-icons: true;
+}

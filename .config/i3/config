@@ -544,3 +544,6 @@ for_window [class="float-term"] floating enable, resize set 70 ppt 70 ppt, move 
 
 # Screenshot bind
 bindsym $mod+Shift+s exec ~/.config/i3/screenshot.sh
+
+# Disable mouse acceleration for all mice
+exec_always --no-startup-id ~/.config/scripts/disable-mouse-accel.sh

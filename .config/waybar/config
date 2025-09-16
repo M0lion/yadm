@@ -64,11 +64,11 @@
         "on-click": "~/.config/waybar/scripts/OCV",
     },
     "cpu": {
-        "format": "🖳{usage}%",
+        "format": "CPU {usage}%",
         "on-click": "foot -e htop"
     },
     "memory": {
-        "format": "🖴 {: >3}%",
+        "format": "MEM {: >3}%",
         "on-click": "foot -e htop"
     },
     "temperature": {

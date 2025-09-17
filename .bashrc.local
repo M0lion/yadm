@@ -1,4 +1,4 @@
-export PATH=$HOME/bin:$PATH
+export PATH=$PATH:$HOME/.local/bin/
 
 if ! test -f ~/.local/bin/getnf; then
 	curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash -s -- --silent
@@ -10,9 +10,4 @@ if ! fc-list | grep -i "Hack Nerd Font Mono" > /dev/null; then
     getnf -iHack
 fi
 
-# Fzf nvim opener
-nf() {
-    nvim $(fzf)
-}
-
-alias tnux=tmux-projects.sh
+export PS1='\[\033[0;32m\][\u@\h \W]\$\[\033[0m\] '

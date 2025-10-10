@@ -15,6 +15,9 @@ return {
 			lazygit = { enabled = true },
 		},
 		config = function()
+			vim.keymap.set("n", "<leader>gb", function()
+				Snacks.git.blame_line()
+			end)
 			vim.keymap.set("n", "<leader>gs", function()
 				Snacks.lazygit()
 			end)

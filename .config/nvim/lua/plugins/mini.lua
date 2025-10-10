@@ -18,20 +18,4 @@ return {
 			options = { use_as_default_explorer = true }
 		},
 	},
-	{
-		"echasnovski/mini.ai",
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter-textobjects",
-			"nvim-treesitter/nvim-treesitter",
-		},
-		version = "*",
-		config = function()
-			local spec_treesitter = require('mini.ai').gen_spec.treesitter
-			require("mini.ai").setup({
-				custom_textobjects = {
-					F = spec_treesitter({ a = '@function.outer', i = '@function.inner' }),
-				},
-			})
-		end
-	},
 }

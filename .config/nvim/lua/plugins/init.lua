@@ -7,13 +7,14 @@ return {
 	{ import = "plugins.formatting" },
 	{ import = "plugins.snacks" },
 	{ import = "plugins.mini" },
-	{ "nvim-treesitter/nvim-treesitter" },
-	{ "catppuccin/nvim",
-	name = "catppuccin",
-	priority = 1000, 
-	config = function()
-		-- Color scheme
-		vim.cmd.colorscheme "catppuccin" -- Set the colorscheme to Catppuccin
-	end,
-},
+	{ import = "plugins.treesitter" },
+	{
+		"catppuccin/nvim",
+		name = "catppuccin",
+		priority = 1000,
+		config = function()
+			-- Color scheme
+			vim.cmd.colorscheme "catppuccin" -- Set the colorscheme to Catppuccin
+		end,
+	},
 }

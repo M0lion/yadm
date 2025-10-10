@@ -30,7 +30,6 @@ return {
 				"lua_ls",
 				"ts_ls",
 				"rust_analyzer",
-
 			},
 			automatic_installation = true,
 		},

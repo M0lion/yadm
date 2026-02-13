@@ -38,6 +38,7 @@ return {
 				ensure_installed = {
 					"lua_ls",
 					"ts_ls",
+					"gopls",
 				},
 				automatic_installation = true,
 				automatic_enable = true,
@@ -58,6 +59,7 @@ return {
 			vim.keymap.set('n', '<leader>ps', builtin.lsp_document_symbols)
 			vim.keymap.set('n', '<leader>per', builtin.diagnostics)
 			vim.keymap.set('n', '<leader>prr', builtin.lsp_references)
+			vim.keymap.set('n', '<leader>pi', builtin.lsp_implementations)
 
 			-- Set up global LSP behavior
 			local capabilities = require('blink.cmp').get_lsp_capabilities()

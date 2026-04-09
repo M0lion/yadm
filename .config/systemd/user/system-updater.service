@@ -1,0 +1,6 @@
+[Unit]
+Description=Auto update system packages
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/sudo /usr/bin/pacman -Suy --noconfirm

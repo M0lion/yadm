@@ -51,36 +51,34 @@ return {
 		opts = {
 			history = true,
 			updateevents = "TextChanged,TextChangedI",
+			region_check_events = "CursorMoved,CursorHold,InsertEnter",
+			delete_check_events = "TextChanged,InsertLeave",
 		},
 		config = function(_, opts)
 			require("luasnip").config.setup(opts)
-			
+
 			-- Keybindings for snippet jumping
 			local luasnip = require("luasnip")
-			vim.keymap.set({"i", "s"}, "<Tab>", function()
+			vim.keymap.set({ "i", "s" }, "C-<Tab>", function()
 				if luasnip.locally_jumpable(1) then
 					luasnip.jump(1)
-				else
-					return "<Tab>"
 				end
-			end, {silent = true, expr = true})
-			
-			vim.keymap.set({"i", "s"}, "<S-Tab>", function()
+			end, { silent = true, expr = true })
+
+			vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
 				if luasnip.locally_jumpable(-1) then
 					luasnip.jump(-1)
-				else
-					return "<S-Tab>"
 				end
-			end, {silent = true, expr = true})
-			
+			end, { silent = true, expr = true })
+
 			-- Exit snippet mode with Ctrl+E
-			vim.keymap.set({"i", "s"}, "<C-e>", function()
+			vim.keymap.set({ "i", "s" }, "<C-e>", function()
 				if luasnip.choice_active() then
 					luasnip.change_choice(1)
 				else
 					luasnip.unlink_current()
 				end
-			end, {silent = true})
+			end, { silent = true })
 		end,
 	}
 }

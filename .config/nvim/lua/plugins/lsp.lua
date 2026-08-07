@@ -34,7 +34,6 @@ return {
 					"gopls",
 					"rust_analyzer",
 					"kotlin_language_server",
-					"astro_language_server",
 				},
 				automatic_enable = true,
 			})
@@ -49,7 +48,7 @@ return {
 				before_init = function(_, config)
 					local function usable(dir)
 						return vim.fn.filereadable(dir .. "/tsserverlibrary.js") == 1
-							or vim.fn.filereadable(dir .. "/typescript.js") == 1
+								or vim.fn.filereadable(dir .. "/typescript.js") == 1
 					end
 					local local_tsdk = (config.root_dir or vim.fn.getcwd()) .. "/node_modules/typescript/lib"
 					local mason_tsdk = vim.fn.expand(

@@ -32,7 +32,6 @@ return {
 					"lua_ls",
 					"ts_ls",
 					"gopls",
-					"rust_analyzer",
 					"kotlin_language_server",
 				},
 				automatic_enable = true,
@@ -59,6 +58,16 @@ return {
 					config.init_options.typescript.tsdk = usable(local_tsdk) and local_tsdk or mason_tsdk
 				end,
 			})
+
+			vim.lsp.config("rust_analyzer", {
+				settings = {
+					["rust-analyzer"] = {
+						cargo = { allFeatures = true },
+						procMacro = { enable = true },
+					},
+				},
+			})
+			vim.lsp.enable("rust_analyzer")
 
 			vim.lsp.enable("zls")
 

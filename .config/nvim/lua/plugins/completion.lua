@@ -59,7 +59,7 @@ return {
 
 			-- Keybindings for snippet jumping
 			local luasnip = require("luasnip")
-			vim.keymap.set({ "i", "s" }, "C-<Tab>", function()
+			vim.keymap.set({ "i", "s" }, "<Tab>", function()
 				if luasnip.locally_jumpable(1) then
 					luasnip.jump(1)
 				end
@@ -73,11 +73,7 @@ return {
 
 			-- Exit snippet mode with Ctrl+E
 			vim.keymap.set({ "i", "s" }, "<C-e>", function()
-				if luasnip.choice_active() then
-					luasnip.change_choice(1)
-				else
-					luasnip.unlink_current()
-				end
+				luasnip.cleanup();
 			end, { silent = true })
 		end,
 	}

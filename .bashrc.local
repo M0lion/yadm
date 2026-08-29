@@ -13,3 +13,7 @@ fi
 export PS1='\[\033[0;32m\][\u@\h \W]\$\[\033[0m\] '
 
 alias gitf='GIT_SSH_COMMAND="ssh -o IdentityAgent=SSH_AUTH_SOCK" git'
+
+export ANDROID_HOME=/home/bjorn/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+

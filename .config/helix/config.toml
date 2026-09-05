@@ -1,0 +1,12 @@
+theme = "catppuccin_mocha"
+
+[editor]
+line-number = "relative"
+scrolloff = 999
+
+[keys.insert]
+C-s = "normal_mode"
+
+[keys.select]
+C-s = "normal_mode"
+C-r = "redo"

@@ -33,6 +33,7 @@ return {
 					"ts_ls",
 					"gopls",
 					"kotlin_language_server",
+					"qmlls",
 				},
 				automatic_enable = true,
 			})
@@ -68,6 +69,12 @@ return {
 				},
 			})
 			vim.lsp.enable("rust_analyzer")
+			
+			vim.lsp.config("ts_ls", {
+				settings = {
+					completions = { completeFunctionCalls = true },
+				},
+			})
 
 			vim.lsp.enable("zls")
 

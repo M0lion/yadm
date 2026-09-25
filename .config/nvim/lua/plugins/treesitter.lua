@@ -17,6 +17,7 @@ return {
 				c = "@class",
 				b = "@block",
 				a = "@parameter",
+				x = "@jsx",
 			}) do
 				vim.keymap.set({ "x", "o" }, "a" .. key, function()
 					select.select_textobject(obj .. ".outer", "textobjects")
@@ -27,10 +28,10 @@ return {
 			end
 
 			local jumps = {
-				goto_next_start     = { ["]b"] = "@block.outer", ["]f"] = "@function.outer", ["]c"] = "@class.outer" },
-				goto_next_end       = { ["]B"] = "@block.outer", ["]F"] = "@function.outer", ["]C"] = "@class.outer" },
-				goto_previous_start = { ["[b"] = "@block.outer", ["[f"] = "@function.outer", ["[c"] = "@class.outer" },
-				goto_previous_end   = { ["[B"] = "@block.outer", ["[F"] = "@function.outer", ["[C"] = "@class.outer" },
+				goto_next_start     = { ["]b"] = "@block.outer", ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["]x"] = "@jsx.outer" },
+				goto_next_end       = { ["]B"] = "@block.outer", ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]X"] = "@jsx.outer" },
+				goto_previous_start = { ["[b"] = "@block.outer", ["[f"] = "@function.outer", ["[c"] = "@class.outer", ["[x"] = "@jsx.outer" },
+				goto_previous_end   = { ["[B"] = "@block.outer", ["[F"] = "@function.outer", ["[C"] = "@class.outer", ["[X"] = "@jsx.outer" },
 			}
 			for fn, maps in pairs(jumps) do
 				for key, obj in pairs(maps) do

@@ -1,0 +1,154 @@
+#!/usr/bin/env bash
+# syncthing-apply: make the local Syncthing config match two declaration files.
+#
+#   devices:   name device-id [introducer]
+#   folders:   name path
+#
+# Blank lines and lines starting with # are ignored. The same files can be
+# shared across all machines: this machine's own entry in `devices` is skipped.
+# Every declared folder is shared with every declared device.
+#
+# Anything not declared (devices, folders, folder shares) is removed unless
+# --no-prune is given. Removing a folder only stops syncing it; files on disk
+# are left alone.
+#
+# Usage: syncthing-apply [-n|--dry-run] [--no-prune] [-d DIR]
+#   -d DIR   directory holding `devices` and `folders`
+#            (default: ${XDG_CONFIG_HOME:-~/.config}/syncthing-apply)
+#
+# Extra arguments for `syncthing cli` (e.g. --home=...) can be passed via
+# the ST_CLI_ARGS environment variable.
+
+set -euo pipefail
+
+conf_dir="${XDG_CONFIG_HOME:-$HOME/.config}/syncthing"
+dry_run=0
+prune=1
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -n|--dry-run) dry_run=1 ;;
+        --no-prune)   prune=0 ;;
+        -d)           conf_dir="$2"; shift ;;
+        -h|--help)    sed -n '2,22p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+        *)            echo "unknown argument: $1" >&2; exit 2 ;;
+    esac
+    shift
+done
+
+devices_file="$conf_dir/devices"
+folders_file="$conf_dir/folders"
+for f in "$devices_file" "$folders_file"; do
+    [[ -r "$f" ]] || { echo "cannot read $f" >&2; exit 1; }
+done
+
+# shellcheck disable=SC2086
+st() { syncthing cli ${ST_CLI_ARGS:-} "$@"; }
+
+# Print a change, and apply it unless this is a dry run.
+change() {
+    local msg="$1"; shift
+    if (( dry_run )); then echo "[dry-run] $msg"; else echo "$msg"; "$@"; fi
+}
+
+# Read a declaration file, dropping comments and blank lines.
+entries() { sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' "$1"; }
+
+contains() { grep -qxF -- "$1" <<<"$2"; }
+
+my_id=$(st show system | sed -n 's/.*"myID": *"\([^"]*\)".*/\1/p')
+[[ -n "$my_id" ]] || { echo "could not reach Syncthing (is it running?)" >&2; exit 1; }
+
+# ---- parse declarations -----------------------------------------------------
+
+declare -A dev_name dev_intro
+want_devices=""
+while read -r name id flag extra; do
+    [[ -n "$id" && -z "$extra" ]] || { echo "bad device line: $name $id $flag $extra" >&2; exit 1; }
+    case "$flag" in
+        "")         intro=false ;;
+        introducer) intro=true ;;
+        *)          echo "unknown device flag '$flag' for $name" >&2; exit 1 ;;
+    esac
+    [[ "$id" == "$my_id" ]] && continue
+    dev_name[$id]=$name
+    dev_intro[$id]=$intro
+    want_devices+="$id"$'\n'
+done < <(entries "$devices_file")
+
+declare -A folder_path
+want_folders=""
+while read -r name path; do
+    [[ -n "$path" ]] || { echo "bad folder line: $name" >&2; exit 1; }
+    path="${path/#\~/$HOME}"
+    folder_path[$name]=$path
+    want_folders+="$name"$'\n'
+done < <(entries "$folders_file")
+
+# ---- devices: add / update --------------------------------------------------
+
+have_devices=$(st config devices list)
+for id in "${!dev_name[@]}"; do
+    name=${dev_name[$id]} intro=${dev_intro[$id]}
+    if ! contains "$id" "$have_devices"; then
+        args=(--device-id "$id" --name "$name")
+        [[ "$intro" == true ]] && args+=(--introducer)
+        change "add device $name ($id)" st config devices add "${args[@]}"
+        continue
+    fi
+    [[ "$(st config devices "$id" name get)" == "$name" ]] ||
+        change "rename device $id -> $name" st config devices "$id" name set "$name"
+    [[ "$(st config devices "$id" introducer get)" == "$intro" ]] ||
+        change "set introducer=$intro on $name" st config devices "$id" introducer set "$intro"
+done
+
+# ---- folders: add / update / share ------------------------------------------
+
+have_folders=$(st config folders list)
+for name in "${!folder_path[@]}"; do
+    path=${folder_path[$name]}
+    if ! contains "$name" "$have_folders"; then
+        (( dry_run )) || mkdir -p "$path"
+        change "add folder $name at $path" \
+            st config folders add --id "$name" --label "$name" --path "$path"
+        shared=""
+    else
+        [[ "$(st config folders "$name" path get)" == "$path" ]] ||
+            change "set path of $name -> $path" st config folders "$name" path set "$path"
+        [[ "$(st config folders "$name" label get)" == "$name" ]] ||
+            change "set label of $name -> $name" st config folders "$name" label set "$name"
+        shared=$(st config folders "$name" devices list)
+    fi
+
+    for id in "${!dev_name[@]}"; do
+        contains "$id" "$shared" ||
+            change "share $name with ${dev_name[$id]}" \
+                st config folders "$name" devices add --device-id "$id"
+    done
+
+    if (( prune )); then
+        while read -r id; do
+            [[ -z "$id" || "$id" == "$my_id" ]] && continue
+            contains "$id" "$want_devices" ||
+                change "unshare $name from $(st config devices "$id" name get 2>/dev/null || echo "$id")" \
+                    st config folders "$name" devices "$id" delete
+        done <<<"$shared"
+    fi
+done
+
+# ---- prune undeclared folders and devices -----------------------------------
+
+if (( prune )); then
+    while read -r name; do
+        [[ -z "$name" ]] && continue
+        contains "$name" "$want_folders" ||
+            change "remove folder $name (files are kept)" st config folders "$name" delete
+    done <<<"$have_folders"
+
+    while read -r id; do
+        [[ -z "$id" || "$id" == "$my_id" ]] && continue
+        contains "$id" "$want_devices" ||
+            change "remove device $(st config devices "$id" name get) ($id)" \
+                st config devices "$id" delete
+    done <<<"$have_devices"
+fi

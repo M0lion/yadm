@@ -20,3 +20,5 @@ if [[ -f "$SERVICES_LIST" ]]; then
 
 	systemctl --user daemon-reload
 fi
+
+$HOME/.config/syncthing/syncthing-apply

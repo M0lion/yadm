@@ -34,6 +34,7 @@ return {
 					"gopls",
 					"kotlin_language_server",
 					"qmlls",
+					"ols",
 				},
 				automatic_enable = true,
 			})

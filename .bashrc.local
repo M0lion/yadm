@@ -17,3 +17,8 @@ alias gitf='GIT_SSH_COMMAND="ssh -o IdentityAgent=SSH_AUTH_SOCK" git'
 export ANDROID_HOME=/home/bjorn/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
+
+# Start Hyprland on TTY1 login; exec so a crash ends the session instead of leaving a shell
+if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ] && [ "$XDG_SESSION_TYPE" = tty ]; then
+    exec start-hyprland
+fi
